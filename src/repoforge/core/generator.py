@@ -1,4 +1,4 @@
-﻿"""Core repo generation logic."""
+"""Core repo generation logic."""
 
 from __future__ import annotations
 

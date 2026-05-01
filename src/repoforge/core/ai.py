@@ -1,4 +1,4 @@
-﻿"""AI-powered content generation for scaffolded repos."""
+"""AI-powered content generation for scaffolded repos."""
 
 from __future__ import annotations
 
@@ -16,10 +16,10 @@ def generate_readme(config: ScaffoldConfig) -> str:
         return _readme_template(config)
 
     try:
-        import anthropic
-        client = anthropic.Anthropic(api_key=api_key)
-        message = client.messages.create(
-            model="claude-sonnet-4-20250514",
+        from openai import OpenAI
+        client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=api_key)
+        message = client.chat.completions.create(
+            model="meta-llama/llama-3.1-8b-instruct:free",
             max_tokens=1024,
             messages=[{
                 "role": "user",
@@ -34,7 +34,7 @@ def generate_readme(config: ScaffoldConfig) -> str:
                 ),
             }],
         )
-        return message.content[0].text
+        return message.choices[0].message.content
     except Exception:
         return _readme_template(config)
 
