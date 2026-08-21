@@ -2,7 +2,19 @@
 
 from __future__ import annotations
 
-TEMPLATES: dict[str, dict] = {
+from typing import TypedDict
+
+
+class Template(TypedDict):
+    """Metadata for one scaffold template."""
+
+    language: str
+    description: str
+    industries: list[str]
+    includes: list[str]
+
+
+TEMPLATES: dict[str, Template] = {
     "python-service": {
         "language": "Python",
         "description": "FastAPI microservice with uv, ruff, mypy, pytest, and Docker",

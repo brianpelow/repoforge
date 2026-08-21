@@ -4,6 +4,15 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import TypedDict
+
+
+class CheckResult(TypedDict):
+    """One audit check outcome."""
+
+    name: str
+    passed: bool
+    detail: str
 
 SECRET_PATTERNS = [
     r"(?i)(api[_-]?key|secret|password|token)\s*=\s*['""][^'""]{8,}['""]",
@@ -19,7 +28,7 @@ class RepoAuditor:
         self.path = path.resolve()
         self.industry = industry
 
-    def run(self) -> list[dict]:
+    def run(self) -> list[CheckResult]:
         return [
             self._check_file("LICENSE", "LICENSE present"),
             self._check_license_content("LICENSE is a real license"),
@@ -34,11 +43,11 @@ class RepoAuditor:
             self._check_file("docs/adr", "ADR directory present"),
         ]
 
-    def _check_file(self, relative: str, name: str) -> dict:
+    def _check_file(self, relative: str, name: str) -> CheckResult:
         exists = (self.path / relative).exists()
         return {"name": name, "passed": exists, "detail": "" if exists else f"Missing: {relative}"}
 
-    def _check_license_content(self, name: str) -> dict:
+    def _check_license_content(self, name: str) -> CheckResult:
         """A LICENSE file that is not a license text grants nothing.
 
         Presence is not a grant. A pointer to a URL or a short summary
@@ -63,19 +72,19 @@ class RepoAuditor:
         )
         return {"name": name, "passed": passed, "detail": detail}
 
-    def _check_ci(self, name: str) -> dict:
+    def _check_ci(self, name: str) -> CheckResult:
         workflows_path = self.path / ".github" / "workflows"
         workflows = list(workflows_path.glob("*.yml")) if workflows_path.exists() else []
         passed = len(workflows) > 0
         detail = f"{len(workflows)} workflow(s)" if passed else "No workflows found"
         return {"name": name, "passed": passed, "detail": detail}
 
-    def _check_lockfile(self, name: str) -> dict:
+    def _check_lockfile(self, name: str) -> CheckResult:
         candidates = ["uv.lock", "poetry.lock", "package-lock.json", "yarn.lock", "Pipfile.lock"]
         found = next((c for c in candidates if (self.path / c).exists()), None)
         return {"name": name, "passed": found is not None, "detail": found or "No lock file found"}
 
-    def _check_secrets(self, name: str) -> dict:
+    def _check_secrets(self, name: str) -> CheckResult:
         violations: list[str] = []
         for f in self.path.rglob("*"):
             if f.is_file() and f.suffix in {".py", ".ts", ".js", ".env", ".yml", ".yaml", ".toml"}:

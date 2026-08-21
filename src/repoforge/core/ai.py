@@ -36,7 +36,10 @@ def generate_readme(config: ScaffoldConfig) -> str:
                 ),
             }],
         )
-        return message.choices[0].message.content
+        content = message.choices[0].message.content
+        if content is None:
+            return _readme_template(config)
+        return content
     except Exception:
         return _readme_template(config)
 
