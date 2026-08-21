@@ -1,4 +1,4 @@
-﻿"""Built-in scaffold template registry."""
+"""Built-in scaffold template registry."""
 
 from __future__ import annotations
 

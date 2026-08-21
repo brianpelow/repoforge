@@ -1,4 +1,4 @@
-﻿"""Tests for RepoAuditor."""
+"""Tests for RepoAuditor."""
 
 import tempfile
 from pathlib import Path

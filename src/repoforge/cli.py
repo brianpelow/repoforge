@@ -1,4 +1,4 @@
-﻿"""repoforge CLI entry point."""
+"""repoforge CLI entry point."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ def main(
     ctx: typer.Context,
     version: bool = typer.Option(False, "--version", "-v", help="Show version and exit."),
 ) -> None:
-    """repoforge — forge production-ready repos in seconds."""
+    """repoforge -- forge production-ready repos in seconds."""
     if version:
         console.print(f"repoforge v{__version__}")
         raise typer.Exit()

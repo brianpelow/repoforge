@@ -1,4 +1,4 @@
-﻿"""Repo auditor — checks a repo against regulated-industry standards."""
+"""Repo auditor -- checks a repo against regulated-industry standards."""
 
 from __future__ import annotations
 

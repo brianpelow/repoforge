@@ -1,4 +1,4 @@
-﻿"""Tests for the template registry."""
+"""Tests for the template registry."""
 
 from repoforge.core.templates import TEMPLATES
 

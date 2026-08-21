@@ -75,5 +75,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0 -- see [LICENSE](LICENSE).
 """

@@ -1,4 +1,4 @@
-﻿"""templates command — manage and inspect scaffold templates."""
+"""templates command -- manage and inspect scaffold templates."""
 
 from __future__ import annotations
 

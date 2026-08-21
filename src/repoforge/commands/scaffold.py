@@ -1,4 +1,4 @@
-﻿"""scaffold command — generate a new repo from a template."""
+"""scaffold command -- generate a new repo from a template."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ def scaffold_new(
             generator.push_to_github()
 
     repo_path = output_dir / name
-    console.print(f"\n[bold green]✓[/bold green] Created [cyan]{name}[/cyan] at [dim]{repo_path}[/dim]")
+    console.print(f"\n[bold green]OK[/bold green] Created [cyan]{name}[/cyan] at [dim]{repo_path}[/dim]")
 
 
 @scaffold_app.command("list-templates")

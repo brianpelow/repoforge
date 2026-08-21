@@ -1,4 +1,4 @@
-﻿"""Configuration models for repoforge."""
+"""Configuration models for repoforge."""
 
 from __future__ import annotations
 

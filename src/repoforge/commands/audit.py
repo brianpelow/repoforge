@@ -1,4 +1,4 @@
-﻿"""audit command — check an existing repo against regulated-industry standards."""
+"""audit command -- check an existing repo against regulated-industry standards."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ def audit_run(
 
     passed = 0
     for check in results:
-        status = "[green]✓[/green]" if check["passed"] else "[red]✗[/red]"
+        status = "[green]OK[/green]" if check["passed"] else "[red]X[/red]"
         if check["passed"]:
             passed += 1
         table.add_row(check["name"], status, check.get("detail", ""))
