@@ -22,6 +22,7 @@ class RepoAuditor:
     def run(self) -> list[dict]:
         return [
             self._check_file("LICENSE", "LICENSE present"),
+            self._check_license_content("LICENSE is a real license"),
             self._check_file("CONTRIBUTING.md", "CONTRIBUTING.md present"),
             self._check_file("CHANGELOG.md", "CHANGELOG.md present"),
             self._check_file("README.md", "README.md present"),
@@ -36,6 +37,31 @@ class RepoAuditor:
     def _check_file(self, relative: str, name: str) -> dict:
         exists = (self.path / relative).exists()
         return {"name": name, "passed": exists, "detail": "" if exists else f"Missing: {relative}"}
+
+    def _check_license_content(self, name: str) -> dict:
+        """A LICENSE file that is not a license text grants nothing.
+
+        Presence is not a grant. A pointer to a URL or a short summary
+        leaves recipients without the terms, and automated detection
+        reports the project as unlicensed. Apache-2.0 section 4(a)
+        requires that recipients receive a copy of the License.
+        """
+        path = self.path / "LICENSE"
+        if not path.exists():
+            return {"name": name, "passed": False,
+                    "detail": "Missing: LICENSE"}
+        text = path.read_text(encoding="utf-8", errors="replace")
+        markers = (
+            "TERMS AND CONDITIONS FOR USE",
+            "Permission is hereby granted, free of charge",
+            "Redistribution and use in source and binary forms",
+        )
+        passed = len(text) >= 1000 and any(m in text for m in markers)
+        detail = "" if passed else (
+            f"{len(text)} chars, no operative license text "
+            "(pointer or summary, not a license)"
+        )
+        return {"name": name, "passed": passed, "detail": detail}
 
     def _check_ci(self, name: str) -> dict:
         workflows_path = self.path / ".github" / "workflows"

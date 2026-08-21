@@ -22,6 +22,11 @@ def test_audit_detects_license() -> None:
         results = auditor.run()
         license_check = next(r for r in results if r["name"] == "LICENSE present")
         assert license_check["passed"] is True
+        # Presence passes, but the stub is not a license and must fail.
+        content_check = next(
+            r for r in results if r["name"] == "LICENSE is a real license"
+        )
+        assert content_check["passed"] is False
 
 
 def test_audit_clean_secrets() -> None:
