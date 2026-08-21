@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install
+        run: uv sync --extra dev --locked
+      - name: Lint
+        run: uv run ruff check src tests
+      - name: Types
+        run: uv run mypy src
+      - name: Test
+        run: uv run pytest -q
+      - name: ASCII guard
+        run: |
+          uv run python - <<'PY'
+          import sys
+          from pathlib import Path
+          bad = []
+          for p in list(Path("src").rglob("*.py")) + list(Path("tests").rglob("*.py")):
+              t = p.read_text(encoding="utf-8", errors="replace")
+              n = sum(1 for c in t if ord(c) > 127)
+              if n:
+                  bad.append((p, n))
+          for p, n in bad:
+              print(f"{p}: {n} non-ASCII")
+          sys.exit(1 if bad else 0)
+          PY
