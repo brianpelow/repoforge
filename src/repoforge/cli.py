@@ -6,9 +6,9 @@ import typer
 from rich.console import Console
 
 from repoforge import __version__
+from repoforge.commands.audit import audit_app
 from repoforge.commands.scaffold import scaffold_app
 from repoforge.commands.templates import templates_app
-from repoforge.commands.audit import audit_app
 
 app = typer.Typer(
     name="repoforge",

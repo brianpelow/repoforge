@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import subprocess
-from pathlib import Path
 from datetime import date
 
 from repoforge.core.config import ScaffoldConfig

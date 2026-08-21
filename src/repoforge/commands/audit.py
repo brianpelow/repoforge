@@ -17,7 +17,9 @@ console = Console()
 @audit_app.command("run")
 def audit_run(
     path: Path = typer.Argument(Path("."), help="Path to the repository to audit"),
-    industry: str = typer.Option("fintech", "--industry", "-i", help="Industry standard to check against"),
+    industry: str = typer.Option(
+        "fintech", "--industry", "-i", help="Industry standard to check against"
+    ),
 ) -> None:
     """Audit a repository against regulated-industry engineering standards."""
     auditor = RepoAuditor(path, industry)
@@ -38,4 +40,7 @@ def audit_run(
     console.print(table)
     score = int((passed / len(results)) * 100)
     color = "green" if score >= 80 else "yellow" if score >= 60 else "red"
-    console.print(f"\n[bold]Score: [{color}]{score}%[/{color}][/bold] ({passed}/{len(results)} checks passed)\n")
+    console.print(
+        f"\n[bold]Score: [{color}]{score}%[/{color}][/bold] "
+        f"({passed}/{len(results)} checks passed)\n"
+    )

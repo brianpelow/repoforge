@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -11,9 +10,9 @@ from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.prompt import Prompt
 
-from repoforge.core.generator import RepoGenerator
-from repoforge.core.config import ScaffoldConfig
 from repoforge.core.ai import generate_readme
+from repoforge.core.config import ScaffoldConfig
+from repoforge.core.generator import RepoGenerator
 
 scaffold_app = typer.Typer(help="Scaffold a new repository from a template.")
 console = Console()
@@ -24,9 +23,11 @@ def scaffold_new(
     name: str = typer.Argument(..., help="Repository name"),
     template: str = typer.Option("python-service", "--template", "-t", help="Template to use"),
     industry: str = typer.Option("fintech", "--industry", "-i", help="Target industry context"),
-    description: Optional[str] = typer.Option(None, "--description", "-d", help="Repo description"),
+    description: str | None = typer.Option(None, "--description", "-d", help="Repo description"),
     output_dir: Path = typer.Option(Path("."), "--output", "-o", help="Output directory"),
-    ai_readme: bool = typer.Option(True, "--ai-readme/--no-ai-readme", help="Generate README with AI"),
+    ai_readme: bool = typer.Option(
+        True, "--ai-readme/--no-ai-readme", help="Generate README with AI"
+    ),
     push: bool = typer.Option(False, "--push/--no-push", help="Create and push to GitHub"),
 ) -> None:
     """Scaffold a new production-ready repository."""
@@ -81,7 +82,9 @@ def scaffold_new(
             generator.push_to_github()
 
     repo_path = output_dir / name
-    console.print(f"\n[bold green]OK[/bold green] Created [cyan]{name}[/cyan] at [dim]{repo_path}[/dim]")
+    console.print(
+        f"\n[bold green]OK[/bold green] Created [cyan]{name}[/cyan] at [dim]{repo_path}[/dim]"
+    )
 
 
 @scaffold_app.command("list-templates")

@@ -5,7 +5,6 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-
 SECRET_PATTERNS = [
     r"(?i)(api[_-]?key|secret|password|token)\s*=\s*['""][^'""]{8,}['""]",
     r"(?i)ghp_[A-Za-z0-9]{36}",
@@ -42,7 +41,8 @@ class RepoAuditor:
         workflows_path = self.path / ".github" / "workflows"
         workflows = list(workflows_path.glob("*.yml")) if workflows_path.exists() else []
         passed = len(workflows) > 0
-        return {"name": name, "passed": passed, "detail": f"{len(workflows)} workflow(s)" if passed else "No workflows found"}
+        detail = f"{len(workflows)} workflow(s)" if passed else "No workflows found"
+        return {"name": name, "passed": passed, "detail": detail}
 
     def _check_lockfile(self, name: str) -> dict:
         candidates = ["uv.lock", "poetry.lock", "package-lock.json", "yarn.lock", "Pipfile.lock"]
@@ -62,4 +62,5 @@ class RepoAuditor:
                 except Exception:
                     pass
         passed = len(violations) == 0
-        return {"name": name, "passed": passed, "detail": f"Flagged: {', '.join(violations[:3])}" if violations else "Clean"}
+        detail = f"Flagged: {', '.join(violations[:3])}" if violations else "Clean"
+        return {"name": name, "passed": passed, "detail": detail}

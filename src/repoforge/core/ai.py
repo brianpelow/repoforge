@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+
 from repoforge.core.config import ScaffoldConfig
 
 
@@ -26,7 +27,8 @@ def generate_readme(config: ScaffoldConfig) -> str:
                 "content": (
                     f"Write a professional GitHub README.md for a project called '{config.name}'. "
                     f"Description: {config.description}. "
-                    f"Industry context: {config.industry} (regulated financial services / fintech). "
+                    f"Industry context: {config.industry} "
+                    "(regulated financial services / fintech). "
                     f"Template type: {config.template}. "
                     "Include: badges section, overview, architecture diagram placeholder, "
                     "quick start, configuration, contributing, and license sections. "

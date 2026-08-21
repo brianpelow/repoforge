@@ -46,7 +46,7 @@ def templates_show(
     console.print(f"  Language:    [yellow]{meta['language']}[/yellow]")
     console.print(f"  Description: {meta['description']}")
     console.print(f"  Industries:  [green]{', '.join(meta['industries'])}[/green]")
-    console.print(f"  Includes:")
+    console.print("  Includes:")
     for item in meta["includes"]:
         console.print(f"    [dim]-[/dim] {item}")
     console.print()

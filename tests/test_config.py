@@ -1,6 +1,7 @@
 """Tests for ScaffoldConfig."""
 
 from pathlib import Path
+
 from repoforge.core.config import ScaffoldConfig
 
 

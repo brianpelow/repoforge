@@ -40,6 +40,12 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
 
+[tool.ruff.lint.per-file-ignores]
+# generator.py embeds entire scaffolded files as string literals.
+# Wrapping them would obscure the exact bytes written to disk.
+# Extracting them to package data is tracked separately.
+"src/repoforge/core/generator.py" = ["E501"]
+
 [tool.mypy]
 python_version = "3.12"
 strict = true
