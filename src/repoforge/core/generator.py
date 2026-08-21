@@ -4,9 +4,21 @@ from __future__ import annotations
 
 import subprocess
 from datetime import date
+from importlib.resources import files
 
 from repoforge.core.config import ScaffoldConfig
 from repoforge.core.templates import TEMPLATES
+
+
+def _apache_license() -> str:
+    """Return the canonical Apache-2.0 text shipped as package data.
+
+    Read from the packaged file rather than embedded as a literal so the
+    bytes stay identical to the upstream license and remain detectable.
+    """
+    return (files("repoforge.data") / "apache-2.0.txt").read_text(
+        encoding="utf-8"
+    )
 
 
 class RepoGenerator:
@@ -33,7 +45,12 @@ class RepoGenerator:
     def write_configs(self) -> None:
         today = date.today().isoformat()
         (self.path / ".gitignore").write_text("__pycache__/\n*.pyc\n.venv/\n.env\n*.egg-info/\ndist/\n.pytest_cache/\n.coverage\n")
-        (self.path / "LICENSE").write_text("Apache License\nVersion 2.0, January 2004\nhttp://www.apache.org/licenses/\n")
+        (self.path / "LICENSE").write_text(
+            _apache_license(), encoding="utf-8", newline="\n"
+        )
+        (self.path / "NOTICE").write_text(
+            self._notice(), encoding="utf-8", newline="\n"
+        )
         (self.path / "CONTRIBUTING.md").write_text("# Contributing\n\nSee README for development setup.\n")
         (self.path / "CHANGELOG.md").write_text(f"# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - {today}\n\n### Added\n- Initial scaffold\n")
         (self.path / ".github" / "CODEOWNERS").write_text("* @brianpelow\n")
@@ -55,6 +72,15 @@ class RepoGenerator:
             ["gh", "repo", "create", self.config.name, "--public",
              "--description", self.config.description, "--source", str(self.path), "--push"],
             check=True,
+        )
+
+    def _notice(self) -> str:
+        return (
+            f"{self.config.name}\n"
+            "Copyright 2026 Brian Pelow\n"
+            "\n"
+            "This product includes software developed by Brian Pelow.\n"
+            "Licensed under the Apache License, Version 2.0 (see LICENSE).\n"
         )
 
     def _python_ci(self) -> str:
